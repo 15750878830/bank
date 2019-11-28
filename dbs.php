@@ -1,6 +1,7 @@
 <?php
 class dbs{
-    var $companyNum = '91234';//商店编号  前5位固定数字
+    //9835 9836 9837
+    var $companyNum = '99835';//商店编号  前5位固定数字
     var $randNum = '';//随机编码 8位数字
     var $checkNum = '';//检查玛 逻辑产生
     var $needPayMoney = '';//需要付的钱
@@ -20,10 +21,10 @@ class dbs{
         $list = str_split($str);
         return $list;
     }
-    public function toSum($str)
+    public function toSum()
     {   
         $sum = 0;
-        $array = $this->strToArray($str);
+        $array = $this->strToArray();
         $newList = [9,8,7,6,5,4,3,2,1,2,3,4,5];
         for ($x=0; $x<count($array); $x++) {
                 $sum += $array[$x]*$newList[$x];
@@ -41,6 +42,7 @@ class dbs{
         $str = $str.$money;
         $numList = [9,8,7,6,5,4,3,2,1,2,3];
         $array = $this->strToArray($str);
+        // print_r($array);exit;
         $sum = 0;
         for ($x=0; $x<count($array); $x++) {
                 $sum += $array[$x]*$numList[$x];
@@ -48,23 +50,28 @@ class dbs{
         return $sum;
     }
 
-    public function getCheckNum($money = '',$str = '')
+    public function getCheckNum($money = '')
     {
-        $sum = $this->toSum($str) + $this->moneyTosum($money);
+        $sum = $this->toSum() + $this->moneyTosum($money);
         $res = $sum/10;
         $checkNum  = (ceil($res) - $res)*10;
         return  $checkNum;
     }
-    public function getDbsAccount($money,$str = '')
+    public function getDbsAccount($money)
     {
-       return $this->companyNumJoinRandNum().$this->getCheckNum($money,$str ='');
+       return $this->companyNumJoinRandNum().$this->getCheckNum($money);
     }
 
 }
 $dbs = new dbs();
-$res = $dbs->getDbsAccount($needPayMoney = '18000');
+$needPayMoney = $_POST['needPayMoney'];
+$res = $dbs->getDbsAccount($needPayMoney);
+// $toSum = $dbs->toSum(9983500001235);
+// $moneyTosum = $dbs->moneyTosum(5800);
+// $sum  = $toSum + $moneyTosum;
 // $list = str_split($res);
+// $res = $dbs->getCheckNum(1,68183910);
 // print_r($res);
-// echo $res;
+echo $res; 
 
 ?>
